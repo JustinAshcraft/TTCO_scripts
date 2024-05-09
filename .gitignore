@@ -1,0 +1,8 @@
+.env
+.DS_Store
+
+backups/*.txt
+parsed/*.json
+parsed/*.txt
+logs/*.txt
+wb-output/*.txt
