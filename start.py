@@ -93,7 +93,7 @@ def txt_to_csv_and_json(file_to_watch, csv_file, json_file):
         writer.writerow(headers)
         for line in data_lines:
             parsed_row = parse_row(line)
-            if parsed_row[0] != 'TIRE SIZE'  and 'TUCKER TIRE CO' not in parsed_row[3]:  
+            if parsed_row[0] != 'TIRE SIZE' and parsed_row[1] not in ['ZZZ', 'INF'] and 'TUCKER TIRE CO' not in parsed_row[3]:  
                 # Add to above line to skip rows that start with 'TIRE' or have 'ZZZ' or 'INF' in the second column [[---->   and parsed_row[1] not in ['ZZZ', 'INF']   <----]]
                 # Also skip the row where the 4th column contains 'TUCKER TIRE CO'
                 inventory_id = generate_inventory_id(parsed_row[0], parsed_row[1], parsed_row[2], parsed_row[3])
@@ -119,6 +119,7 @@ def sftp_upload_files(host, username, password):
                 with sftp.cd('wb-output'):  # change to the remote directory
                     sftp.put(csv_file)  # upload csv file to remote directory
                     sftp.put(json_file)  # upload json file to remote directory
+                    sftp.put(file_to_watch)
                     success_message = f'{current_time} PST => Files successfully uploaded!'
                     print(success_message)
                     with open('./logs/log.txt', 'a') as f:
